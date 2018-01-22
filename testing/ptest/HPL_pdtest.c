@@ -56,7 +56,7 @@ void HPL_pdtest
    HPL_T_grid *                     GRID,
    HPL_T_palg *                     ALGO,
    const int                        N,
-   const int                        NB
+   int                        NB
 )
 #else
 void HPL_pdtest
@@ -141,7 +141,7 @@ void HPL_pdtest
    mat.n  = N; mat.nb = NB; mat.info = 0;
    mat.mp = HPL_numroc( N, NB, NB, myrow, 0, nprow );
    nq     = HPL_numroc( N, NB, NB, mycol, 0, npcol );
-   mat.nq = nq + 1;
+   mat.nq = nq + 10;
 /*
  * Allocate matrix, right-hand-side, and vector solution x. [ A | b ] is
  * N by N+1.  One column is added in every process column for the solve.
@@ -182,7 +182,7 @@ void HPL_pdtest
    mat.A  = (double *)HPL_PTR( vptr,
                                ((size_t)(ALGO->align) * sizeof(double) ) );
    mat.X  = Mptr( mat.A, 0, mat.nq, mat.ld );
-   HPL_pdmatgen( GRID, N, N, NB, mat.A, mat.ld, HPL_ISEED );
+   HPL_pdmatgen( GRID, N, N+10, NB, mat.A, mat.ld, HPL_ISEED );
    fprintf(stderr, "(%d/%d) (%d/%d) A\n", myrow, nprow-1, mycol, npcol-1);
    // HPL_pdmatgen( GRID, N, N+1, NB, mat.A, mat.ld, HPL_ISEED );
 #ifdef HPL_CALL_VSIPL
@@ -218,15 +218,13 @@ void HPL_pdtest
       int nblks, mblks, lmb, lnb;
       (void)HPL_grid_info(GRID, &nprow, &npcol, &myrow, &mycol);
       Mnumroc(mp, N, NB, NB, myrow, 0, nprow);
-      Mnumroc(nq, N, NB, NB, mycol, 0, npcol);
+      Mnumroc(nq, N+10, NB, NB, mycol, 0, npcol);
       mblks = ( mp + NB - 1 ) / NB; lmb = mp - ( ( mp - 1 ) / NB ) * NB;
       nblks = ( nq + NB - 1 ) / NB; lnb = nq - ( ( nq - 1 ) / NB ) * NB;
-      // HPL_fprintf(TEST->outfp, "%d %d\n", mat.ld, mp);
+      printf("BLOCK SIZE: %d ROW BLOWS: %d COL BLOCKS: %d last block row: %d last block col: %d\n", NB, mblks, nblks, mp, nq);
       char filename[50];
       char cmd[100];
-      fprintf(stderr, "(%d/%d) (%d/%d) C\n", myrow, nprow-1, mycol, npcol-1);
       FILE ***files = malloc(mblks * sizeof(FILE **));
-      fprintf(stderr, "(%d/%d) (%d/%d) D\n", myrow, nprow-1, mycol, npcol-1);
       for (i = 0; i < mblks; i++) {
          files[i] = malloc(nblks * sizeof(FILE **));
          for (j = 0; j < nblks; j++) {
@@ -237,7 +235,6 @@ void HPL_pdtest
          }
       }
 
-      fprintf(stderr, "(%d/%d) (%d/%d) E\n", myrow, nprow-1, mycol, npcol-1);
       for( jblk = 0; jblk < nblks; jblk++ )
       {
          jb = ( jblk == nblks - 1 ? lnb : NB );
@@ -247,22 +244,21 @@ void HPL_pdtest
 	    {
 	       ib = ( iblk == mblks - 1 ? lmb : NB );
 	       FILE *curr_file = files[iblk][jblk];
-               fprintf(stderr, "(%d/%d) (%d/%d): Writing %d/%d %d/%d\n", myrow, nprow-1, mycol, npcol-1, iblk, mblks-1, jk, jb-1);
 	       fwrite(A, sizeof(double), ib, curr_file);
-               fprintf(stderr, "(%d/%d) (%d/%d): Success!\n", myrow, nprow-1, mycol, npcol-1);
 	       A += ib;
-	       // for( ik = 0; ik < ib; A++, ik++ ) *A = ;// HPL_rand();
 	    }
 	    A += mat.ld - mp;
          }
       }
-
+      printf("START\n");
+      for (i = 0; i < mp; i++) {
+          printf("%lf\n", mat.X[i]);
+      }
       for (i = 0; i < mblks; i++) {
          for (j = 0; j < nblks; j++) {
 	    fclose(files[i][j]);
    	    int col = j * npcol + mycol;
    	    int row = i * nprow + myrow;
-            fprintf(stderr, "(%d/%d) (%d/%d): Uploading %d %d\n", myrow, nprow-1, mycol, npcol-1, row, col);
 	    sprintf(cmd, "cd /shared/numpywren && /home/ec2-user/anaconda3/bin/python3 upload_blocks.py %d %d", row, col);
 	    system(cmd);
          }

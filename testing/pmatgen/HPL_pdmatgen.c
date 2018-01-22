@@ -121,24 +121,14 @@ void HPL_pdmatgen
 /*
  * .. Local Variables ..
  */
-   int                        iadd [2], ia1  [2], ia2  [2], ia3  [2],
-                              ia4  [2], ia5  [2], ib1  [2], ib2  [2],
-                              ib3  [2], ic1  [2], ic2  [2], ic3  [2],
-                              ic4  [2], ic5  [2], iran1[2], iran2[2],
-                              iran3[2], iran4[2], itmp1[2], itmp2[2],
-                              itmp3[2], jseed[2], mult [2];
-   int                        ib, iblk, ik, jb, jblk, jk, jump1, jump2,
-                              jump3, jump4, jump5, jump6, jump7, lmb,
+   (void)(ISEED);
+   int                        ib, iblk, jb, jblk, jk, lmb,
                               lnb, mblks, mp, mycol, myrow, nblks,
                               npcol, nprow, nq;
 /* ..
  * .. Executable Statements ..
  */
    (void) HPL_grid_info( GRID, &nprow, &npcol, &myrow, &mycol );
-
-   mult [0] = HPL_MULT0; mult [1] = HPL_MULT1;
-   iadd [0] = HPL_IADD0; iadd [1] = HPL_IADD1;
-   jseed[0] = ISEED;     jseed[1] = 0;
 /*
  * Generate an M by N matrix starting in process (0,0)
  */
@@ -151,38 +141,16 @@ void HPL_pdmatgen
  */
    mblks = ( mp + NB - 1 ) / NB; lmb = mp - ( ( mp - 1 ) / NB ) * NB;
    nblks = ( nq + NB - 1 ) / NB; lnb = nq - ( ( nq - 1 ) / NB ) * NB;
-/*
- * Compute multiplier/adder fo
- *    sprintf(buff, "%d_%d", );r various jumps in random sequence
- */
-   jump1 = 1;  jump2 = nprow * NB; jump3 = M; jump4 = npcol * NB;
-   jump5 = NB; jump6 = mycol;      jump7 = myrow * NB;
-
-   HPL_xjumpm( jump1, mult, iadd, jseed, iran1, ia1,   ic1   );
-   HPL_xjumpm( jump2, mult, iadd, iran1, itmp1, ia2,   ic2   );
-   HPL_xjumpm( jump3, mult, iadd, iran1, itmp1, ia3,   ic3   );
-   HPL_xjumpm( jump4, ia3,  ic3,  iran1, itmp1, ia4,   ic4   );
-   HPL_xjumpm( jump5, ia3,  ic3,  iran1, itmp1, ia5,   ic5   );
-   HPL_xjumpm( jump6, ia5,  ic5,  iran1, itmp3, itmp1, itmp2 );
-   HPL_xjumpm( jump7, mult, iadd, itmp3, iran1, itmp1, itmp2 );
-   HPL_setran( 0, iran1 ); HPL_setran( 1, ia1 ); HPL_setran( 2, ic1 );
-/*
- * Save value of first number in sequence
- */
-   ib1[0] = iran1[0]; ib1[1] = iran1[1];
-   ib2[0] = iran1[0]; ib2[1] = iran1[1];
-   ib3[0] = iran1[0]; ib3[1] = iran1[1];
 
    int i, j;
    char filename[50];
    char cmd[100];
    FILE ***files = malloc(mblks * sizeof(FILE **));
    for (i = 0; i < mblks; i++) {
-      files[i] = malloc(nblks * sizeof(FILE **));
+      files[i] = malloc(nblks * sizeof(FILE *));
       for (j = 0; j < nblks; j++) {
          int col = j * npcol + mycol;
          int row = i * nprow + myrow;
-         fprintf(stderr, "(%d/%d) (%d/%d):  %d/%d %d/%d\n", myrow, nprow-1, mycol, npcol-1, row, mblks-1, col, nblks-1);
          sprintf(cmd, "cd /shared/numpywren && /home/ec2-user/anaconda3/bin/python3 download_blocks.py %d %d", row, col);
          system(cmd);
          sprintf(filename, "/home/ec2-user/%d_%d", row, col);
@@ -199,23 +167,11 @@ void HPL_pdmatgen
          {
             ib = ( iblk == mblks - 1 ? lmb : NB );
             FILE *curr_file = files[iblk][jblk];
-            fprintf(stderr, "(%d/%d) (%d/%d): Reading  %d/%d %d/%d\n", myrow, nprow-1, mycol, npcol-1, iblk, mblks-1, jk, jb-1);
             fread(A, sizeof(double), ib, curr_file);
-            fprintf(stderr, "(%d/%d) (%d/%d): Success!\n", myrow, nprow-1, mycol, npcol-1);
             A += ib;
-            // for( ik = 0; ik < ib; A++, ik++ ) *A = ;// HPL_rand();
-            HPL_jumpit( ia2, ic2, ib1, iran2 );
-            ib1[0] = iran2[0]; ib1[1] = iran2[1];
          }
          A += LDA - mp;
-         HPL_jumpit( ia3, ic3, ib2, iran3 );
-         ib1[0] = iran3[0]; ib1[1] = iran3[1];
-         ib2[0] = iran3[0]; ib2[1] = iran3[1];
       }
-      HPL_jumpit( ia4, ic4, ib3, iran4 );
-      ib1[0] = iran4[0]; ib1[1] = iran4[1];
-      ib2[0] = iran4[0]; ib2[1] = iran4[1];
-      ib3[0] = iran4[0]; ib3[1] = iran4[1];
    }
 
    for (i = 0; i < mblks; i++) {
