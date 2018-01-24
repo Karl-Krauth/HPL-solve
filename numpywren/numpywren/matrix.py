@@ -22,7 +22,7 @@ cpu_count = multiprocessing.cpu_count()
 logger = logging.getLogger(__name__)
 
 try:
-    DEFAULT_BUCKET = "ec2-user-pywren-947" # wc.default()['s3']['bucket']
+    DEFAULT_BUCKET = "pictureweb" # "ec2-user-pywren-947" # wc.default()['s3']['bucket']
 except Exception as e:
     DEFAULT_BUCKET = ""
 

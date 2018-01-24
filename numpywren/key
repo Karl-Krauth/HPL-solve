@@ -1,1 +1,2 @@
-2ca1bc342dd5274658c9021fa80173b794318a1b
+gemm(BigMatrix(imagenet_fishervector_1024_centers_train), BigMatrix(imagenet_fishervector_1024_centers_train).T)
+068c2dd9a4fd18b454000ffe996734a4c741895b
