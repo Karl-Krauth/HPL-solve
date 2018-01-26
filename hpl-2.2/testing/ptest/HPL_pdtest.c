@@ -248,7 +248,7 @@ void HPL_pdtest
 	       A += ib;
                if (jk == jb - 1) {
 	          fclose(curr_file);
-	          sprintf(cmd, "cd /shared/HPL-solve/numpywren && /home/ec2-user/anaconda3/bin/python3 upload_blocks.py %d %d && rm /dev/shm/%d_%d", row, col, row, col);
+	          sprintf(cmd, "cd /home/ec2-user/HPL-solve/numpywren && /home/ec2-user/anaconda3/bin/python3 upload_blocks.py %d %d && rm /dev/shm/%d_%d", row, col, row, col);
 	          system(cmd);
                   
                }

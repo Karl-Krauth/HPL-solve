@@ -67,7 +67,7 @@ ARCH         = ec2
 # - HPL Directory Structure / HPL library ------------------------------
 # ----------------------------------------------------------------------
 #
-TOPdir       = /shared/HPL-solve/hpl-2.2
+TOPdir       = /home/ec2-user/HPL-solve/hpl-2.2
 INCdir       = $(TOPdir)/include
 BINdir       = $(TOPdir)/bin/$(ARCH)
 LIBdir       = $(TOPdir)/lib/$(ARCH)

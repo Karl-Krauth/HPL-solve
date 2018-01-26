@@ -156,7 +156,7 @@ void HPL_pdmatgen
             int col = jblk * npcol + mycol;
             int row = iblk * nprow + myrow;
             if (jk == 0) {
-               sprintf(cmd, "cd /shared/HPL-solve/numpywren && /home/ec2-user/anaconda3/bin/python3 download_blocks.py %d %d", row, col);
+               sprintf(cmd, "cd /home/ec2-user/HPL-solve/numpywren && /home/ec2-user/anaconda3/bin/python3 download_blocks.py %d %d", row, col);
                system(cmd);
                sprintf(filename, "/dev/shm/%d_%d", row, col);
                files[iblk] = fopen(filename, "r");
