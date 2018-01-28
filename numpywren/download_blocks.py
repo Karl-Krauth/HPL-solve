@@ -17,9 +17,6 @@ with open("shape", "w") as f:
 start_idx = idx_1 * mat.shard_sizes[0]
 end_idx = (idx_1 + 1) * mat.shard_sizes[0]
 num_blocks = ((mat.shape[0] + (mat.shard_sizes[0] - 1)) // mat.shard_sizes[0])
-print(start_idx)
-print(end_idx)
-print(num_blocks)
 if end_idx <= mat.shape[0]:
     blk = mat.get_block(idx_0, idx_1)
 elif start_idx >= mat.shape[0]:

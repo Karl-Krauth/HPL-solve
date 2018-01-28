@@ -511,7 +511,7 @@ class BigSymmetricMatrix(BigMatrix):
                  dtype=np.float64,
                  parent_fn=None,
                  write_header=False):
-        BigMatrix.__init__(self, key, shape, shard_sizes, bucket, prefix, dtype, parent_fn, write_header)
+        BigMatrix.__init__(self, key, shape, shard_sizes, bucket, prefix, dtype, parent_fn, write_header=write_header)
 
     @property
     def T(self):

@@ -1,4 +1,5 @@
 from numpywren.matrix import BigMatrix
+from numpywren.matrix import BigSymmetricMatrix
 import sys
 import scipy.linalg as la
 import numpy as np
@@ -7,7 +8,9 @@ np.set_printoptions(precision=3)
 with open("shape", "r") as f:
     N = int(f.readline().strip())
     NB = int(f.readline().strip())
-input = BigMatrix(sys.argv[1], shape=[N, N+1000], shard_sizes=[NB, NB]).numpy(36)
+input = BigSymmetricMatrix(sys.argv[1], shape=[N, N], shard_sizes=[NB, NB]).numpy(36)
+input2 = BigMatrix(sys.argv[2], shape=[N, 1000], shard_sizes=[NB, NB]).numpy(36)
+input = np.append(input, input2, axis=1)
 output = BigMatrix(sys.argv[1] + ".out", shape=[N, N+1000], shard_sizes=[NB, NB], write_header=True).numpy(36)
 P, L, U = la.lu(input)
 U2 = np.triu(output)

@@ -183,7 +183,6 @@ void HPL_pdtest
                                ((size_t)(ALGO->align) * sizeof(double) ) );
    mat.X  = Mptr( mat.A, 0, mat.nq, mat.ld );
    HPL_pdmatgen( GRID, N, N+1000, NB, mat.A, mat.ld, HPL_ISEED );
-   fprintf(stderr, "(%d/%d) (%d/%d) A\n", myrow, nprow-1, mycol, npcol-1);
    // HPL_pdmatgen( GRID, N, N+1, NB, mat.A, mat.ld, HPL_ISEED );
 #ifdef HPL_CALL_VSIPL
    mat.block = vsip_blockbind_d( (vsip_scalar_d *)(mat.A),
@@ -196,7 +195,6 @@ void HPL_pdtest
    HPL_ptimer_boot(); (void) HPL_barrier( GRID->all_comm );
    time( &current_time_start );
    HPL_ptimer( 0 );
-   fprintf(stderr, "(%d/%d) (%d/%d) B\n", myrow, nprow-1, mycol, npcol-1);
    HPL_pdgesv( GRID, ALGO, &mat );
    HPL_ptimer( 0 );
    time( &current_time_end );
@@ -220,7 +218,6 @@ void HPL_pdtest
       Mnumroc(nq, N+1000, NB, NB, mycol, 0, npcol);
       mblks = ( mp + NB - 1 ) / NB; lmb = mp - ( ( mp - 1 ) / NB ) * NB;
       nblks = ( nq + NB - 1 ) / NB; lnb = nq - ( ( nq - 1 ) / NB ) * NB;
-      printf("BLOCK SIZE: %d ROW BLOWS: %d COL BLOCKS: %d last block row: %d last block col: %d\n", NB, mblks, nblks, mp, nq);
       char filename[50];
       char cmd[100];
       FILE **files = malloc(mblks * sizeof(FILE *));

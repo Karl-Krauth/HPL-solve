@@ -127,10 +127,10 @@ void HPL_pdgesv0
    {
       n = N - j; jb = Mmin( n, nb );
 #ifdef HPL_PROGRESS_REPORT
+      printf("%d/%d\n", j / nb, N / nb);
       /* if this is process 0,0 and not the first panel */
       if ( GRID->myrow == 0 && GRID->mycol == 0 && j > 0 ) 
       {
-          printf("%d/%d\n", j / nb, N / nb);
           time = HPL_timer_walltime() - start_time;
           gflops = 2.0*(N*(double)N*N - n*(double)n*n)/3.0/(time > 0.0 ? time : 1e-6)/1e9;
           HPL_fprintf( stdout, "Column=%09d Fraction=%4.1f%% Gflops=%9.3e\n", j, j*100.0/N, gflops);
