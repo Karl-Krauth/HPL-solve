@@ -127,7 +127,6 @@ void HPL_pdgesv0
    {
       n = N - j; jb = Mmin( n, nb );
 #ifdef HPL_PROGRESS_REPORT
-      printf("%d/%d\n", j / nb, N / nb);
       /* if this is process 0,0 and not the first panel */
       if ( GRID->myrow == 0 && GRID->mycol == 0 && j > 0 ) 
       {
