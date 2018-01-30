@@ -1,0 +1,3 @@
+source /opt/intel/impi/2018.1.163/bin64/mpivars.sh
+source /opt/intel/bin/compilervars.sh intel64
+
