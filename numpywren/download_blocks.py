@@ -21,6 +21,12 @@ if end_idx <= mat.shape[0]:
     blk = mat.get_block(idx_0, idx_1)
 elif start_idx >= mat.shape[0]:
     blk = B.get_block(idx_0, idx_1 - num_blocks)
+elif start_idx < mat.shape[0] and end_idx > mat.shape[0]:
+    blk = mat.get_block(idx_0, idx_1)
+    blk2 = B.get_block(idx_0, 0)
+    blk = np.append(blk, blk2, axis=1)
+    if blk.shape[1] > mat.shard_sizes[0]:
+        blk = blk[:, :mat.shard_sizes]
 else:
     # TODO ensure we account for aligning
     assert(False) 
