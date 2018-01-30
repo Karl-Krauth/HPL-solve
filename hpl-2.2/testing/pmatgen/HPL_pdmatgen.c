@@ -155,7 +155,7 @@ void HPL_pdmatgen
          {
             int col = jblk * npcol + mycol;
             int row = iblk * nprow + myrow;
-            if (jk == 0) {
+            if (0) {// jk == 0) {
                sprintf(cmd, "cd /home/ec2-user/HPL-solve/numpywren && /home/ec2-user/anaconda3/bin/python3 download_blocks.py %d %d", row, col);
                system(cmd);
                sprintf(filename, "/dev/shm/%d_%d", row, col);
@@ -163,9 +163,11 @@ void HPL_pdmatgen
             }
             ib = ( iblk == mblks - 1 ? lmb : NB );
             FILE *curr_file = files[iblk];
-            fread(A, sizeof(double), ib, curr_file);
-            A += ib;
-            if (jk == jb - 1) {
+            // fread(A, sizeof(double), ib, curr_file);
+            int i;
+            for (i = 0; i < ib; ++i) {*A = ((double)rand()) / RAND_MAX; ++A;}
+            // A += ib;
+            if (0) {//jk == jb - 1) {
                fclose(curr_file);
                sprintf(cmd, "rm /dev/shm/%d_%d", row, col);
                system(cmd);
