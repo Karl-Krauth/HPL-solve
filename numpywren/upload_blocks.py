@@ -18,4 +18,17 @@ with open("/dev/shm/%d_%d" % (idx_0, idx_1), "rb") as f:
     blk = np.fromstring(f.read())
     # NB and MB intentionally switched
     blk = blk.reshape([NB, MB])
-mat.put_block(blk.T, idx_0, idx_1)
+
+cont = True
+sleep_time = 0
+while cont:
+    try:
+        time.sleep(sleep_time)
+        mat.put_block(blk.T, idx_0, idx_1)
+        cont = False
+    except:
+        if sleep_time == 0:
+            sleep_time = 1
+        else:
+            sleep_time *= 2
+        print("%d %d failed sleeping for %d and retrying" % (idx_0, idx_1))
