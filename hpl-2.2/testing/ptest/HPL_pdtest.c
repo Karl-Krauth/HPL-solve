@@ -195,7 +195,7 @@ void HPL_pdtest
    HPL_ptimer_boot(); (void) HPL_barrier( GRID->all_comm );
    time( &current_time_start );
    HPL_ptimer( 0 );
-   HPL_pdgesv( GRID, ALGO, &mat );
+   // HPL_pdgesv( GRID, ALGO, &mat );
    HPL_ptimer( 0 );
    time( &current_time_end );
 #ifdef HPL_CALL_VSIPL
