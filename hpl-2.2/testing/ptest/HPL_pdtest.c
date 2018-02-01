@@ -195,7 +195,7 @@ void HPL_pdtest
    HPL_ptimer_boot(); (void) HPL_barrier( GRID->all_comm );
    time( &current_time_start );
    HPL_ptimer( 0 );
-   HPL_pdgesv( GRID, ALGO, &mat );
+   // HPL_pdgesv( GRID, ALGO, &mat );
    HPL_ptimer( 0 );
    time( &current_time_end );
 #ifdef HPL_CALL_VSIPL
@@ -245,7 +245,7 @@ void HPL_pdtest
 	       A += ib;
                if (jk == jb - 1) {
 	          fclose(curr_file);
-	          sprintf(cmd, "cd /home/ec2-user/HPL-solve/numpywren && /home/ec2-user/anaconda3/bin/python3 upload_blocks.py %d %d && rm /dev/shm/%d_%d", row, col, row, col);
+	          sprintf(cmd, "cd /home/ec2-user/HPL-solve/numpywren && /home/ec2-user/anaconda3/bin/python3 upload_blocks.py %d %d", row, col, row, col);
 	          system(cmd);
                   
                }

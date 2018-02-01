@@ -8,7 +8,7 @@ with open("key", "r") as f:
 idx_0 = int(sys.argv[1])
 idx_1 = int(sys.argv[2])
 print("GETTING " + str(idx_0) + "," + str(idx_1))
-mat = BigSymmetricMatrix(key)
+mat = BigSymmetricMatrix(key, lambdav=1e-4)
 B = BigMatrix(B_key)
 with open("shape", "w") as f:
     f.write("%d\n" % mat.shape[0])

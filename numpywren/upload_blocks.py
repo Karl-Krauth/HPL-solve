@@ -2,6 +2,7 @@ import sys
 import numpy as np
 from numpywren.matrix import BigMatrix
 import struct
+import time
 
 with open("key", "r") as f:
     key = f.readline().strip() + ".out"
@@ -26,9 +27,9 @@ while cont:
         time.sleep(sleep_time)
         mat.put_block(blk.T, idx_0, idx_1)
         cont = False
-    except:
+    except Exception as e:
         if sleep_time == 0:
             sleep_time = 1
         else:
             sleep_time *= 2
-        print("%d %d failed sleeping for %d and retrying" % (idx_0, idx_1))
+        print("%d %d failed sleeping for %d and retrying" % (idx_0, idx_1, sleep_time))
