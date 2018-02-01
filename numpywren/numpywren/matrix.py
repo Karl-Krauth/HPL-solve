@@ -378,6 +378,7 @@ class BigMatrix(object):
             header = json.loads(client.get_object(Bucket=self.bucket,
                                                   Key=key)['Body'].read().decode('utf-8'))
         except Exception as e:
+            print(e)
             header = None
         return header
 
