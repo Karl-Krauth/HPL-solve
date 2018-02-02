@@ -5,7 +5,7 @@ import struct
 import time
 
 with open("key", "r") as f:
-    key = "LU(" + f.readline().strip() + ")"
+    key = "LU(" + f.readline().strip() + ")_{lambda}_{0.1}"
 with open("shape", "r") as f:
     N = int(f.readline().strip())
     NB = int(f.readline().strip())
@@ -17,7 +17,7 @@ sleep_time = 0
 while cont:
     try:
         time.sleep(sleep_time)
-        mat = BigMatrix(key, shape=[N, N+1000], shard_sizes=[NB, NB], write_header=True)
+        mat = BigMatrix(key, shape=[N, N+1000], shard_sizes=[NB, NB])
         cont = False
     except Exception as e:
         if sleep_time == 0:
