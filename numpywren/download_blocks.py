@@ -12,7 +12,7 @@ idx_1 = int(sys.argv[2])
 N = 1281167
 NB = 4096
 print("GETTING " + str(idx_0) + "," + str(idx_1))
-mat = BigSymmetricMatrix(key, shape=[N, N], shard_sizes=[NB, NB], lambdav=1e-5)
+mat = BigSymmetricMatrix(key, shape=[N, N], shard_sizes=[NB, NB], lambdav=100)
 B = BigMatrix(B_key, shape=[N, 1000], shard_sizes=[NB, 1000])
 with open("shape", "w") as f:
     f.write("%d\n" % mat.shape[0])
