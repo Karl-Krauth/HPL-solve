@@ -7,8 +7,8 @@ import time
 with open("key", "r") as f:
     key = "LU(" + f.readline().strip() + ")_{lambda}_{1}_loo"
 with open("shape", "r") as f:
-    N = int(f.readline().strip())
-    NB = int(f.readline().strip())
+    N = 1179648 # int(f.readline().strip())
+    NB = 4096 #int(f.readline().strip())
 idx_0 = int(sys.argv[1])
 idx_1 = int(sys.argv[2])
 print("UPLOADING %d %d" % (idx_0, idx_1))
