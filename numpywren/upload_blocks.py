@@ -5,7 +5,7 @@ import struct
 import time
 
 with open("key", "r") as f:
-    key = "LU(" + f.readline().strip() + ")_{lambda}_{1.0}"
+    key = "LU(" + f.readline().strip() + ")_{lambda}_{0.00001}"
 with open("shape", "r") as f:
     N = int(f.readline().strip())
     NB = int(f.readline().strip())
