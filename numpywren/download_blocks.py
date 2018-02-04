@@ -9,8 +9,8 @@ with open("key", "r") as f:
     B_key = f.readline().strip()
 idx_0 = int(sys.argv[1])
 idx_1 = int(sys.argv[2])
-N = 1281167
-NB = 4096
+N = 1300000
+NB = 1300
 print("GETTING " + str(idx_0) + "," + str(idx_1))
 mat = BigSymmetricMatrix(key, shape=[N, N], shard_sizes=[NB, NB], lambdav=1)
 B = BigMatrix(B_key, shape=[N, 1000], shard_sizes=[NB, 1000])
